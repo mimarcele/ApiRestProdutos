@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProdutoService {
@@ -21,7 +22,6 @@ public class ProdutoService {
     public ProdutoDto cadastrarProduto(ProdutoDto produtoDto) {
 
         Produto produto = new Produto();
-//        produto.setId(produtoDto.getId());
         produto.setNome(produtoDto.getNome());
         produto.setQuantidade(produtoDto.getQuantidade());
         produto.setValor(produtoDto.getValor());
@@ -36,19 +36,19 @@ public class ProdutoService {
     }
 
     public Produto consultarProduto(Long id){
-        Produto produto = produtoRepository.findById(id).get();
+      Optional<Produto> produto = produtoRepository.findById(id);
 
-        if (produto == null){
-        throw new ProdutoNotFoundException("Produto não cadastrado");
+        if (!produto.isPresent()){
+        throw new ProdutoNotFoundException("Produto " + id + " não cadastrado");
         }
-        return produto;
+
+        return produto.get();
     }
 
     public void deletarProduto(Long id){
         Produto produto = produtoRepository.findById(id).get();
-
         if (produto == null){
-            throw new ProdutoNotFoundException("Produto não encontrado");
+            throw new ProdutoNotFoundException("Produto " + id + " não encontrado");
         }
         produtoRepository.delete(produto);
     }
@@ -62,4 +62,5 @@ public class ProdutoService {
                     return produto;
                 }).orElseThrow(()-> new ProdutoNotFoundException("Produto não cadastrado"));
     }
+
 }
