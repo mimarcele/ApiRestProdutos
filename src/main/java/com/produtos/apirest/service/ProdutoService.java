@@ -21,7 +21,6 @@ public class ProdutoService {
     public ProdutoDto cadastrarProduto(ProdutoDto produtoDto) {
 
         Produto produto = new Produto();
-//        produto.setId(produtoDto.getId());
         produto.setNome(produtoDto.getNome());
         produto.setQuantidade(produtoDto.getQuantidade());
         produto.setValor(produtoDto.getValor());
